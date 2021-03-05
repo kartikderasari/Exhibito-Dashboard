@@ -1,0 +1,21 @@
+<template>
+  <v-app-bar app color="white" flat dense>
+    <div class="headline text-no-wrap" style="width: 250px;">
+      <router-link
+        class="font-weight-medium teal--text text-decoration-none"
+        to="/about"
+        style="width: 250px;"
+      >
+        Dashboard
+      </router-link>
+    </div>
+
+    <v-tabs right>
+      <v-tab to="about">About</v-tab>
+      <v-tab to="skills">Skills</v-tab>
+      <v-tab to="experience">Experience</v-tab>
+      <v-tab to="projects">Projects</v-tab>
+    </v-tabs>
+    <v-btn color="primary" outlined small>Logout</v-btn>
+  </v-app-bar>
+</template>
