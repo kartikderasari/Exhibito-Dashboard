@@ -1,26 +1,22 @@
 <template>
-  <v-container class="my-15">
-    <v-row align="center">
-      <span class="text-h5 grey--text text--darken-1 font-weight-medium"
-        >Experience</span
-      >
+  <v-card flat outlined>
+    <v-card-title class="text-caption grey lighten-4 py-2">
       <v-spacer></v-spacer>
-      <v-dialog v-model="addExpDialog" max-width="600px" scrollable>
+      <v-dialog v-model="editExpDialog" max-width="600px" scrollable>
         <template v-slot:activator="{ on, attrs }">
           <v-btn
-            fab
-            dark
-            color="indigo"
+            icon
+            small
             v-bind="attrs"
             v-on="on"
-            @click="setNewSkillData()"
+            @click="setEditSkillData()"
           >
-            <v-icon dark>mdi-plus</v-icon>
+            <v-icon>mdi-circle-edit-outline</v-icon>
           </v-btn>
         </template>
         <v-card>
           <v-card-title>
-            <span class="headline">Add Experience</span>
+            <span class="headline">Edit Experience</span>
           </v-card-title>
           <v-card-text>
             <v-container>
@@ -75,7 +71,7 @@
           </v-card-text>
           <v-card-actions>
             <v-spacer></v-spacer>
-            <v-btn color="blue darken-1" text @click="addExpDialog = false">
+            <v-btn color="blue darken-1" text @click="editExpDialog = false">
               Close
             </v-btn>
             <v-btn
@@ -83,43 +79,51 @@
               text
               @click="
                 {
-                  addExpDialog = false;
-                  addExpData();
+                  editExpDialog = false;
+                  updateExpData();
                 }
               "
             >
-              Add
+              Save
             </v-btn>
           </v-card-actions>
         </v-card>
       </v-dialog>
-    </v-row>
-    <v-row v-if="loading">
-      <v-progress-circular
-        class="mx-auto my-15 py-15"
-        :size="50"
-        color="primary"
-        indeterminate
-      ></v-progress-circular>
-    </v-row>
-    <v-row v-if="!loading">
-      <v-col cols="4" v-for="(exp, index) in experiences" :key="index">
-        <ExperienceCard :exp="exp" v-on:expCardtoExp="readExpData" />
-      </v-col>
-    </v-row>
-  </v-container>
+
+      <v-btn icon small @click="deleteExpData()">
+        <v-icon>mdi-close</v-icon>
+      </v-btn>
+    </v-card-title>
+
+    <v-card-text>
+      <v-row class="py-4" justify="center">
+        <v-col cols="4" align="center">
+          <v-img
+            class="rounded-circle"
+            :src="exp.companyLogoURL"
+            width="100"
+            height="100"
+          ></v-img>
+        </v-col>
+        <v-col cols="8" class="d-flex flex-column  justify-center">
+          <h5 class="title">{{ exp.designation }}</h5>
+          <p class="my-0">{{ exp.companyName }}</p>
+          <p class="my-0">{{ exp.start }} - {{ exp.end }}</p>
+        </v-col>
+      </v-row>
+      <p class="subtitle-1 pt-3">{{ exp.brief }}</p>
+    </v-card-text>
+  </v-card>
 </template>
 
 <script>
 import FDK from "@/config/firebase.js";
-import ExperienceCard from "@/components/ExperienceCard.vue";
 
 export default {
+  props: ["exp"],
   data: () => {
     return {
-      addExpDialog: false,
-      experiences: null,
-      loading: false,
+      editExpDialog: false,
       newExp: {
         brief: null,
         companyLogoURL: null,
@@ -131,39 +135,31 @@ export default {
       },
     };
   },
-  components: { ExperienceCard },
   methods: {
-    setNewSkillData: function() {
-      this.newExp.brief = null;
-      this.newExp.companyLogoURL = null;
-      this.newExp.companyName = null;
-      this.newExp.companyWebsiteURL = null;
-      this.newExp.designation = null;
-      this.newExp.end = null;
-      this.newExp.start = null;
+    setEditSkillData: function() {
+      this.newExp.brief = this.exp.brief;
+      this.newExp.companyLogoURL = this.exp.companyLogoURL;
+      this.newExp.companyName = this.exp.companyName;
+      this.newExp.companyWebsiteURL = this.exp.companyWebsiteURL;
+      this.newExp.designation = this.exp.designation;
+      this.newExp.end = this.exp.end;
+      this.newExp.start = this.exp.start;
     },
-    addExpData: async function() {
+    deleteExpData: async function() {
       await FDK.firestore()
         .collection("experiences")
-        .add(this.newExp);
-      this.readExpData();
+        .doc(this.exp.id)
+        .delete();
+      this.$emit("expCardtoExp");
     },
-    readExpData: function() {
-      this.loading = true;
-      this.experiences = [];
+    updateExpData: function() {
       FDK.firestore()
         .collection("experiences")
-        .get()
-        .then((doc) => {
-          doc.forEach((doc) =>
-            this.experiences.push({ id: doc.id, ...doc.data() })
-          );
-        })
-        .then(() => (this.loading = false));
+        .doc(this.exp.id)
+        .update(this.newExp)
+        .then(() => this.$emit("expCardtoExp"))
+        .catch((e) => console.log(e));
     },
-  },
-  mounted: function() {
-    this.readExpData();
   },
 };
 </script>

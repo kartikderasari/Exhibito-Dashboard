@@ -1,26 +1,22 @@
 <template>
-  <v-container class="my-15">
-    <v-row align="center">
-      <span class="text-h5 grey--text text--darken-1 font-weight-medium"
-        >Projects</span
-      >
+  <v-card flat outlined>
+    <v-card-title class="text-caption grey lighten-4 py-2">
       <v-spacer></v-spacer>
-      <v-dialog v-model="addProjectDialog" max-width="600px" scrollable>
+      <v-dialog v-model="editProjectDialog" max-width="600px" scrollable>
         <template v-slot:activator="{ on, attrs }">
           <v-btn
-            fab
-            dark
-            color="indigo"
+            icon
+            small
             v-bind="attrs"
             v-on="on"
-            @click="setNewProjectData()"
+            @click="setEditProjectData()"
           >
-            <v-icon dark>mdi-plus</v-icon>
+            <v-icon>mdi-circle-edit-outline</v-icon>
           </v-btn>
         </template>
         <v-card>
           <v-card-title>
-            <span class="headline">Add Project</span>
+            <span class="headline">Edit Experience</span>
           </v-card-title>
           <v-card-text>
             <v-container>
@@ -68,7 +64,11 @@
           </v-card-text>
           <v-card-actions>
             <v-spacer></v-spacer>
-            <v-btn color="blue darken-1" text @click="addProjectDialog = false">
+            <v-btn
+              color="blue darken-1"
+              text
+              @click="editProjectDialog = false"
+            >
               Close
             </v-btn>
             <v-btn
@@ -76,46 +76,62 @@
               text
               @click="
                 {
-                  addProjectDialog = false;
-                  addProject();
+                  editProjectDialog = false;
+                  updateExpData();
                 }
               "
             >
-              Add
+              Save
             </v-btn>
           </v-card-actions>
         </v-card>
       </v-dialog>
-    </v-row>
-    <v-row v-if="loading">
-      <v-progress-circular
-        class="mx-auto my-15 py-15"
-        :size="50"
-        color="primary"
-        indeterminate
-      ></v-progress-circular>
-    </v-row>
-    <v-row v-if="!loading">
-      <v-col cols="4" v-for="(project, index) in projects" :key="index">
-        <ProjectCard
-          :project="project"
-          v-on:projectCardtoProject="readProjectData"
-        />
-      </v-col>
-    </v-row>
-  </v-container>
+
+      <v-btn icon small @click="deleteExpData()">
+        <v-icon>mdi-close</v-icon>
+      </v-btn>
+    </v-card-title>
+
+    <v-card-text>
+      <v-row class="py-2" justify="center">
+        <v-col cols="12" align="center">
+          <v-img
+            class="rounded-circle"
+            :src="project.projectImageURL"
+            width="100"
+            height="100"
+          ></v-img>
+        </v-col>
+        <v-col cols="12" class="d-flex flex-column  justify-center">
+          <v-card-title class="py-0">{{ project.title }}</v-card-title>
+          <v-card-text class="my-0">{{ project.brief }}</v-card-text>
+          <v-card-actions>
+            <v-btn
+              class="primary"
+              :href="project.liveURL"
+              small
+              target="_blank"
+              elevation="0"
+              >Visit Project</v-btn
+            >
+            <v-btn outlined :href="project.githubURL" small target="_blank"
+              >View Code</v-btn
+            >
+          </v-card-actions>
+        </v-col>
+      </v-row>
+    </v-card-text>
+  </v-card>
 </template>
 
 <script>
 import FDK from "@/config/firebase.js";
-import ProjectCard from "@/components/ProjectCard.vue";
 
 export default {
+  props: ["project"],
   data: () => {
     return {
-      addProjectDialog: false,
-      projects: null,
-      loading: false,
+      editProjectDialog: false,
       newProject: {
         brief: null,
         githubURL: null,
@@ -126,38 +142,30 @@ export default {
       },
     };
   },
-  components: { ProjectCard },
   methods: {
-    setNewProjectData: function() {
-      this.newProject.brief = null;
-      this.newProject.githubURL = null;
-      this.newProject.liveURL = null;
-      this.newProject.projectImageURL = null;
-      this.newProject.techStack = null;
-      this.newProject.title = null;
+    setEditProjectData: function() {
+      this.newProject.brief = this.project.brief;
+      this.newProject.githubURL = this.project.githubURL;
+      this.newProject.liveURL = this.project.liveURL;
+      this.newProject.projectImageURL = this.project.projectImageURL;
+      this.newProject.techStack = this.project.techStack;
+      this.newProject.title = this.project.title;
     },
-    addProject: async function() {
+    deleteExpData: async function() {
       await FDK.firestore()
         .collection("projects")
-        .add(this.newProject);
-      this.readProjectData();
+        .doc(this.project.id)
+        .delete();
+      this.$emit("projectCardtoProject");
     },
-    readProjectData: function() {
-      this.loading = true;
-      this.projects = [];
+    updateExpData: function() {
       FDK.firestore()
         .collection("projects")
-        .get()
-        .then((doc) => {
-          doc.forEach((doc) =>
-            this.projects.push({ id: doc.id, ...doc.data() })
-          );
-        })
-        .then(() => (this.loading = false));
+        .doc(this.project.id)
+        .update(this.newProject)
+        .then(() => this.$emit("projectCardtoProject"))
+        .catch((e) => console.log(e));
     },
-  },
-  mounted: function() {
-    this.readProjectData();
   },
 };
 </script>
