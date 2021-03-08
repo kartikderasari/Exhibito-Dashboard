@@ -192,14 +192,22 @@
         </v-card>
       </v-col>
       <v-col cols="8">
-        <span class="text-h6 grey--text text--darken-1">Short-bio</span>
-        <p>
-          {{ userData.shortBio }}
-        </p>
-        <span class="text-h6 grey--text text--darken-1">About</span>
-        <p>
-          {{ userData.about }}
-        </p>
+        <v-card color="transparent" flat>
+          <v-card-title
+            class="py-0 font-weight-medium grey--text text--darken-1"
+            >Short-bio</v-card-title
+          >
+          <v-card-text>
+            {{ userData.shortBio }}
+          </v-card-text>
+          <v-card-title
+            class="py-0 font-weight-medium grey--text text--darken-1"
+            >About</v-card-title
+          >
+          <v-card-text>
+            {{ userData.about }}
+          </v-card-text>
+        </v-card>
       </v-col>
     </v-row>
   </v-container>
