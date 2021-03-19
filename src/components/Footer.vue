@@ -3,7 +3,7 @@
     <v-card flat tile width="100%" class="text-center grey lighten-4">
       <v-card-text>
         <span class=" title font-weight-medium grey--text text--darken-1"
-          >Dashboard</span
+          >Portfolio Dashboard</span
         >
       </v-card-text>
 

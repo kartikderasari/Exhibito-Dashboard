@@ -18,12 +18,14 @@
               <v-row>
                 <v-col cols="12">
                   <v-text-field
+                    clearable
                     label="Skill"
                     v-model="skillData.skill"
                   ></v-text-field>
                 </v-col>
                 <v-col cols="12">
                   <v-text-field
+                    clearable
                     label="Image URL"
                     type="url"
                     v-model="skillData.skillLogoURL"

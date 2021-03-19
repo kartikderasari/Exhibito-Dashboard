@@ -23,30 +23,35 @@
               <v-row>
                 <v-col cols="12">
                   <v-text-field
+                    clearable
                     label="Project Title"
                     v-model="newProject.title"
                   ></v-text-field>
                 </v-col>
                 <v-col cols="6">
                   <v-text-field
+                    clearable
                     label="Project Image URL"
                     v-model="newProject.projectImageURL"
                   ></v-text-field>
                 </v-col>
                 <v-col cols="6">
                   <v-text-field
+                    clearable
                     label="Live URL"
                     v-model="newProject.liveURL"
                   ></v-text-field>
                 </v-col>
                 <v-col cols="6">
                   <v-text-field
+                    clearable
                     label="GitHub URL"
                     v-model="newProject.githubURL"
                   ></v-text-field>
                 </v-col>
                 <v-col cols="6">
                   <v-text-field
+                    clearable
                     label="Tech Stack"
                     v-model="newProject.techStack"
                   ></v-text-field>

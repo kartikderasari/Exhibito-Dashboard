@@ -1,7 +1,63 @@
 <template>
-  <v-card flat outlined>
-    <v-card-title class="text-caption grey lighten-4 py-2">
-      <v-spacer></v-spacer>
+  <tr>
+    <td>{{ exp.designation }}</td>
+    <td>{{ exp.companyName }}</td>
+    <td>{{ exp.start }} - {{ exp.end }}</td>
+    <td v-if="exp.brief != null && exp.brief.length >= 50">
+      {{ exp.brief.slice(0, 50) }}...
+    </td>
+    <td v-else>{{ exp.brief }}</td>
+    <td>
+      <v-dialog v-model="viewDialog" width="700" retain-focus>
+        <template v-slot:activator="{ on, attrs }">
+          <v-btn icon small v-bind="attrs" v-on="on">
+            <v-icon>mdi-information-outline</v-icon>
+          </v-btn>
+        </template>
+
+        <v-card>
+          <v-card-text>
+            <v-row class="pt-4">
+              <v-col cols="3" align="center">
+                <v-img
+                  class="rounded-lg"
+                  :src="exp.companyLogoURL"
+                  max-width="80"
+                  max-height="80"
+                ></v-img>
+              </v-col>
+              <v-col cols="9" class="">
+                <h5 class="title ">
+                  {{ exp.designation }}
+                </h5>
+                <p class="my-0">{{ exp.companyName }}</p>
+                <p class="my-0">{{ exp.start }} - {{ exp.end }}</p>
+              </v-col>
+            </v-row>
+          </v-card-text>
+
+          <v-card-text>
+            {{ exp.brief }}
+          </v-card-text>
+
+          <v-divider></v-divider>
+
+          <v-card-actions>
+            <v-spacer></v-spacer>
+            <v-btn
+              color="primary"
+              outlined
+              :href="exp.companyWebsiteURL"
+              target="_blank"
+            >
+              Learn More
+            </v-btn>
+            <v-btn color="primary" text @click="viewDialog = false">
+              Close
+            </v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
       <v-dialog v-model="editExpDialog" max-width="600px" scrollable>
         <template v-slot:activator="{ on, attrs }">
           <v-btn
@@ -23,30 +79,35 @@
               <v-row>
                 <v-col cols="6">
                   <v-text-field
+                    clearable
                     label="Designation"
                     v-model="newExp.designation"
                   ></v-text-field>
                 </v-col>
                 <v-col cols="6">
                   <v-text-field
+                    clearable
                     label="Company Name"
                     v-model="newExp.companyName"
                   ></v-text-field>
                 </v-col>
                 <v-col cols="6">
                   <v-text-field
+                    clearable
                     label="Start Month-Year"
                     v-model="newExp.start"
                   ></v-text-field>
                 </v-col>
                 <v-col cols="6">
                   <v-text-field
+                    clearable
                     label="End Month-Year"
                     v-model="newExp.end"
                   ></v-text-field>
                 </v-col>
                 <v-col cols="6">
                   <v-text-field
+                    clearable
                     label="Company Website URL"
                     v-model="newExp.companyWebsiteURL"
                   ></v-text-field>
@@ -54,6 +115,7 @@
 
                 <v-col cols="6">
                   <v-text-field
+                    clearable
                     label="Company Logo URL"
                     v-model="newExp.companyLogoURL"
                   ></v-text-field>
@@ -89,40 +151,20 @@
           </v-card-actions>
         </v-card>
       </v-dialog>
-
       <v-btn icon small @click="deleteExpData()">
         <v-icon>mdi-close</v-icon>
       </v-btn>
-    </v-card-title>
-
-    <v-card-text>
-      <v-row class="py-4" justify="center">
-        <v-col cols="4" align="center">
-          <v-img
-            class="rounded-circle"
-            :src="exp.companyLogoURL"
-            width="100"
-            height="100"
-          ></v-img>
-        </v-col>
-        <v-col cols="8" class="d-flex flex-column  justify-center">
-          <h5 class="title">{{ exp.designation }}</h5>
-          <p class="my-0">{{ exp.companyName }}</p>
-          <p class="my-0">{{ exp.start }} - {{ exp.end }}</p>
-        </v-col>
-      </v-row>
-      <p class="subtitle-1 pt-3">{{ exp.brief }}</p>
-    </v-card-text>
-  </v-card>
+    </td>
+  </tr>
 </template>
 
 <script>
-import FDK from "@/config/firebase.js";
-
+import FDK from "@/config/firebase";
 export default {
   props: ["exp"],
   data: () => {
     return {
+      viewDialog: false,
       editExpDialog: false,
       newExp: {
         brief: null,
