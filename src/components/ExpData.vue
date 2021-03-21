@@ -1,5 +1,5 @@
 <template>
-  <tr>
+  <tr class="grey--text text--darken-3">
     <td>{{ exp.designation }}</td>
     <td>{{ exp.companyName }}</td>
     <td>{{ exp.start }} - {{ exp.end }}</td>
@@ -80,35 +80,35 @@
                 <v-col cols="6">
                   <v-text-field
                     clearable
-                    label="Designation"
+                    label="Designation*"
                     v-model="newExp.designation"
                   ></v-text-field>
                 </v-col>
                 <v-col cols="6">
                   <v-text-field
                     clearable
-                    label="Company Name"
+                    label="Company Name*"
                     v-model="newExp.companyName"
                   ></v-text-field>
                 </v-col>
                 <v-col cols="6">
                   <v-text-field
                     clearable
-                    label="Start Month-Year"
+                    label="Start [Month-Year]*"
                     v-model="newExp.start"
                   ></v-text-field>
                 </v-col>
                 <v-col cols="6">
                   <v-text-field
                     clearable
-                    label="End Month-Year"
+                    label="End [Month-Year]*"
                     v-model="newExp.end"
                   ></v-text-field>
                 </v-col>
                 <v-col cols="6">
                   <v-text-field
                     clearable
-                    label="Company Website URL"
+                    label="Company Website URL*"
                     v-model="newExp.companyWebsiteURL"
                   ></v-text-field>
                 </v-col>
@@ -116,13 +116,13 @@
                 <v-col cols="6">
                   <v-text-field
                     clearable
-                    label="Company Logo URL"
+                    label="Company Logo URL*"
                     v-model="newExp.companyLogoURL"
                   ></v-text-field>
                 </v-col>
                 <v-col cols="12">
                   <v-textarea
-                    label="Work Description"
+                    label="Work Description*"
                     clearable
                     auto-grow
                     v-model="newExp.brief"

@@ -1,6 +1,5 @@
 <template>
-  <v-main>
-    <Navbar />
+  <v-container class="pt-15 px-xs-5 px-sm-5" fluid>
     <v-container>
       <v-row align="center">
         <span class="text-h5 grey--text text--darken-1 font-weight-medium"
@@ -107,7 +106,14 @@
         ></v-progress-circular>
       </v-row>
       <v-row v-if="!loading">
-        <v-col cols="4" v-for="(project, index) in projects" :key="index">
+        <v-col
+          cols="12"
+          sm="6"
+          md="4"
+          lg="4"
+          v-for="(project, index) in projects"
+          :key="index"
+        >
           <ProjectCard
             :project="project"
             v-on:projectCardtoProject="readProjectData"
@@ -115,13 +121,12 @@
         </v-col>
       </v-row>
     </v-container>
-  </v-main>
+  </v-container>
 </template>
 
 <script>
 import FDK from "@/config/firebase.js";
 import ProjectCard from "@/components/ProjectCard.vue";
-import Navbar from "@/components/Navbar.vue";
 
 export default {
   data: () => {
@@ -139,7 +144,7 @@ export default {
       },
     };
   },
-  components: { ProjectCard, Navbar },
+  components: { ProjectCard },
   methods: {
     setNewProjectData: function() {
       this.newProject.brief = null;
@@ -169,7 +174,7 @@ export default {
         .then(() => (this.loading = false));
     },
   },
-  mounted: function() {
+  created: function() {
     this.readProjectData();
   },
 };

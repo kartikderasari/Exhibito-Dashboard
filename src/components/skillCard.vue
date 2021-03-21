@@ -19,14 +19,14 @@
                 <v-col cols="12">
                   <v-text-field
                     clearable
-                    label="Skill"
+                    label="Skill*"
                     v-model="skillData.skill"
                   ></v-text-field>
                 </v-col>
                 <v-col cols="12">
                   <v-text-field
                     clearable
-                    label="Image URL"
+                    label="Image URL*"
                     type="url"
                     v-model="skillData.skillLogoURL"
                   ></v-text-field>
@@ -66,7 +66,9 @@
         <v-icon>mdi-close</v-icon>
       </v-btn>
     </v-card-title>
-    <v-card-text class="d-flex flex-column align-center pt-6">
+    <v-card-text
+      class="d-flex flex-column align-center pt-6 grey--text text--darken-3"
+    >
       <v-img :src="skill.skillLogoURL" max-width="50" max-height="80"></v-img>
       <p class="subtitle-1 pt-3">{{ skill.skill }}</p>
     </v-card-text>
@@ -93,14 +95,21 @@ export default {
       this.skillData.skillLogoURL = this.skill.skillLogoURL;
     },
     updateSkillsData: function() {
-      FDK.firestore()
-        .collection("skills")
-        .doc(this.skill.id)
-        .update(this.skillData)
-        .then(() => {
-          this.$emit("skillCardtoSkill");
-        })
-        .catch((e) => console.log(e));
+      if (
+        this.skillData.skill.length != 0 &&
+        this.skillData.skillLogoURL.length != 0
+      ) {
+        FDK.firestore()
+          .collection("skills")
+          .doc(this.skill.id)
+          .update(this.skillData)
+          .then(() => {
+            this.$emit("skillCardtoSkill");
+          })
+          .catch((e) => console.log(e));
+      } else {
+        alert("Please check the inputs!");
+      }
     },
     deleteSkill: async function() {
       await FDK.firestore()

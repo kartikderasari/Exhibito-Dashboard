@@ -98,7 +98,7 @@
     </v-card-title>
 
     <v-card-text>
-      <v-row class="py-2" justify="center">
+      <v-row class="py-2" justify="center" no-gutters>
         <v-col cols="12" align="center">
           <v-img
             class="rounded-circle"
@@ -109,8 +109,15 @@
         </v-col>
         <v-col cols="12" class="d-flex flex-column  justify-center">
           <v-card-title class="py-0">{{ project.title }}</v-card-title>
-          <v-card-text class="my-0">{{ project.brief }}</v-card-text>
-          <v-card-actions>
+          <v-card-text
+            v-if="project.brief != null && project.brief.length >= 90"
+            class="my-0 grey--text text--darken-3"
+            >{{ project.brief.slice(0, 90) }}...
+          </v-card-text>
+          <v-card-text v-else class="my-0 grey--text text--darken-3">{{
+            project.brief
+          }}</v-card-text>
+          <v-card-actions class="py-0 pl-4">
             <v-btn
               class="primary"
               :href="project.liveURL"

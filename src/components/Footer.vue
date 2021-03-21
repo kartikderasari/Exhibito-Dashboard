@@ -1,5 +1,5 @@
 <template>
-  <v-footer padless>
+  <v-footer app absolute padless>
     <v-card flat tile width="100%" class="text-center grey lighten-4">
       <v-card-text>
         <span class=" title font-weight-medium grey--text text--darken-1"

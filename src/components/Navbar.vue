@@ -1,5 +1,5 @@
 <template>
-  <v-app-bar app color="white" dense elevation="2">
+  <v-app-bar app color="white" dense elevation="1">
     <div class="headline text-no-wrap" style="width: 250px;">
       <router-link
         class="font-weight-medium grey--text text--darken-1 text-decoration-none"
@@ -10,7 +10,9 @@
       </router-link>
     </div>
 
-    <v-tabs right>
+    <v-spacer></v-spacer>
+
+    <v-tabs right v-if="this.$vuetify.breakpoint.width > 800">
       <v-tab to="about">About</v-tab>
       <v-tab to="skills">Skills</v-tab>
       <v-tab to="experience">Experience</v-tab>

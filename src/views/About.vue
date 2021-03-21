@@ -1,6 +1,5 @@
 <template>
-  <v-main>
-    <Navbar />
+  <v-container class="pt-15 px-xs-5 px-sm-5" fluid>
     <v-container class="grey lighten-4 rounded-lg pa-10">
       <v-row v-if="loading">
         <v-progress-circular
@@ -10,11 +9,18 @@
           indeterminate
         ></v-progress-circular>
       </v-row>
-      <v-row v-if="!loading">
-        <v-col cols="4" align="right">
+      <v-row align="center" v-if="!loading">
+        <v-col cols="12" sm="12" md="4" lg="4">
           <v-dialog v-model="userDialog" max-width="600px" scrollable>
             <template v-slot:activator="{ on, attrs }">
-              <v-btn icon small v-bind="attrs" v-on="on">
+              <v-btn
+                class="float-right"
+                icon
+                small
+                v-bind="attrs"
+                v-on="on"
+                @click="setUserData()"
+              >
                 <v-icon>mdi-circle-edit-outline</v-icon>
               </v-btn>
             </template>
@@ -23,53 +29,72 @@
                 <span class="headline">Edit User Data</span>
               </v-card-title>
               <v-card-text>
-                <v-text-field
-                  clearable
-                  label="Name"
-                  v-model="userData.name"
-                ></v-text-field>
-                <v-text-field
-                  clearable
-                  label="E-mail address"
-                  v-model="userData.email"
-                ></v-text-field>
-                <v-text-field
-                  clearable
-                  label="Profile Photo URL"
-                  type="url"
-                  v-model="userData.profilePhotoURL"
-                ></v-text-field>
-                <v-text-field
-                  clearable
-                  label="Facebook URL"
-                  type="url"
-                  v-model="userData.Facebook"
-                ></v-text-field>
-                <v-text-field
-                  clearable
-                  label="GitHub URL"
-                  type="url"
-                  v-model="userData.GitHub"
-                ></v-text-field>
-                <v-text-field
-                  clearable
-                  label="Instagram URL"
-                  type="url"
-                  v-model="userData.Instagram"
-                ></v-text-field>
-                <v-text-field
-                  clearable
-                  label="LinkedIn URL"
-                  type="url"
-                  v-model="userData.LinkedIn"
-                ></v-text-field>
-                <v-text-field
-                  clearable
-                  label="Twitter URL"
-                  type="url"
-                  v-model="userData.Twitter"
-                ></v-text-field>
+                <v-row>
+                  <v-col cols="6">
+                    <v-text-field
+                      clearable
+                      label="Name"
+                      v-model="editUserData.name"
+                    ></v-text-field>
+                  </v-col>
+                  <v-col cols="6">
+                    <v-text-field
+                      clearable
+                      label="E-mail address"
+                      v-model="editUserData.email"
+                    ></v-text-field>
+                  </v-col>
+                  <v-col cols="6">
+                    <v-text-field
+                      clearable
+                      label="Profile Photo URL"
+                      type="url"
+                      v-model="editUserData.profilePhotoURL"
+                    ></v-text-field>
+                  </v-col>
+                  <v-col cols="6">
+                    <v-text-field
+                      clearable
+                      label="Facebook URL"
+                      type="url"
+                      v-model="editUserData.Facebook"
+                    ></v-text-field>
+                  </v-col>
+                  <v-col cols="6">
+                    <v-text-field
+                      clearable
+                      label="GitHub URL"
+                      type="url"
+                      v-model="editUserData.GitHub"
+                    ></v-text-field>
+                  </v-col>
+                  <v-col cols="6">
+                    <v-text-field
+                      clearable
+                      label="Instagram URL"
+                      type="url"
+                      v-model="editUserData.Instagram"
+                    ></v-text-field>
+                  </v-col>
+                  <v-col cols="6">
+                    <v-text-field
+                      clearable
+                      label="LinkedIn URL"
+                      type="url"
+                      v-model="editUserData.LinkedIn"
+                    ></v-text-field>
+                  </v-col>
+                  <v-col cols="6">
+                    <v-text-field
+                      clearable
+                      label="Twitter URL"
+                      type="url"
+                      v-model="editUserData.Twitter"
+                    ></v-text-field>
+                  </v-col>
+                </v-row>
               </v-card-text>
+              <v-divider></v-divider>
               <v-card-actions>
                 <v-spacer></v-spacer>
                 <v-btn
@@ -78,7 +103,6 @@
                   @click="
                     {
                       userDialog = false;
-                      readData();
                     }
                   "
                 >
@@ -99,71 +123,6 @@
               </v-card-actions>
             </v-card>
           </v-dialog>
-        </v-col>
-        <v-col cols="8" align="right">
-          <v-dialog v-model="bioDialog" max-width="600px" scrollable>
-            <template v-slot:activator="{ on, attrs }">
-              <v-btn icon small v-bind="attrs" v-on="on">
-                <v-icon>mdi-circle-edit-outline</v-icon>
-              </v-btn>
-            </template>
-            <v-card>
-              <v-card-title>
-                <span class="headline">Edit User Data</span>
-              </v-card-title>
-              <v-card-text>
-                <v-container>
-                  <v-row>
-                    <v-col cols="12">
-                      <v-textarea
-                        label="Short Bio"
-                        clearable
-                        auto-grow
-                        v-model="userData.shortBio"
-                      ></v-textarea>
-                      <v-textarea
-                        label="About"
-                        clearable
-                        auto-grow
-                        v-model="userData.about"
-                      ></v-textarea>
-                    </v-col>
-                  </v-row>
-                </v-container>
-              </v-card-text>
-              <v-card-actions>
-                <v-spacer></v-spacer>
-                <v-btn
-                  color="blue darken-1"
-                  text
-                  @click="
-                    {
-                      bioDialog = false;
-                      readData();
-                    }
-                  "
-                >
-                  Close
-                </v-btn>
-                <v-btn
-                  color="blue darken-1"
-                  text
-                  @click="
-                    {
-                      bioDialog = false;
-                      updateUserData();
-                    }
-                  "
-                >
-                  Save
-                </v-btn>
-              </v-card-actions>
-            </v-card>
-          </v-dialog>
-        </v-col>
-      </v-row>
-      <v-row align="center" v-if="!loading">
-        <v-col cols="4">
           <v-card
             color="transparent"
             flat
@@ -204,34 +163,35 @@
             </div>
           </v-card>
         </v-col>
-        <v-col cols="8">
+        <v-col cols="12" sm="12" md="8" lg="8">
+          <BioDialog :editUserData="editUserData" />
           <v-card color="transparent" flat>
             <v-card-title
-              class="py-0 font-weight-medium grey--text text--darken-1"
+              class="py-0 blue font-weight-medium grey--text text--darken-1"
               >Short-bio</v-card-title
             >
-            <v-card-text>
+            <v-card-text class="grey--text text--darken-3">
               {{ userData.shortBio }}
             </v-card-text>
             <v-card-title
               class="py-0 font-weight-medium grey--text text--darken-1"
               >About</v-card-title
             >
-            <v-card-text>
+            <v-card-text class="grey--text text--darken-3">
               {{ userData.about }}
             </v-card-text>
           </v-card>
         </v-col>
       </v-row>
     </v-container>
-  </v-main>
+  </v-container>
 </template>
 
 <script>
 import FDK from "@/config/firebase.js";
-import Navbar from "@/components/Navbar.vue";
-
+import BioDialog from "@/components/BioDialog";
 export default {
+  components: { BioDialog },
   data: () => {
     return {
       loading: false,
@@ -249,15 +209,38 @@ export default {
         LinkedIn: null,
         Twitter: null,
       },
+      editUserData: {
+        name: null,
+        email: null,
+        profilePhotoURL: null,
+        about: null,
+        shortBio: null,
+        Facebook: null,
+        Instagram: null,
+        GitHub: null,
+        LinkedIn: null,
+        Twitter: null,
+      },
     };
   },
-  components: { Navbar },
   methods: {
+    setUserData: function() {
+      this.editUserData.name = this.userData.name;
+      this.editUserData.email = this.userData.email;
+      this.editUserData.profilePhotoURL = this.userData.profilePhotoURL;
+      this.editUserData.about = this.userData.about;
+      this.editUserData.shortBio = this.userData.shortBio;
+      this.editUserData.Facebook = this.userData.Facebook;
+      this.editUserData.Instagram = this.userData.Instagram;
+      this.editUserData.GitHub = this.userData.GitHub;
+      this.editUserData.LinkedIn = this.userData.LinkedIn;
+      this.editUserData.Twitter = this.userData.Twitter;
+    },
     updateUserData: function() {
       FDK.firestore()
         .collection("userInfo")
         .doc("data")
-        .set(this.userData);
+        .set(this.editUserData);
     },
     readData: function() {
       this.loading = true;
@@ -269,7 +252,7 @@ export default {
         .then(() => (this.loading = false));
     },
   },
-  mounted: function() {
+  created: function() {
     this.readData();
   },
 };

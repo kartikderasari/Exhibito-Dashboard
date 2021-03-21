@@ -1,6 +1,5 @@
 <template>
-  <v-main>
-    <Navbar />
+  <v-container class="pt-15 px-xs-5 px-sm-5" fluid>
     <v-container>
       <v-row align="center">
         <span class="text-h5 grey--text text--darken-1 font-weight-medium"
@@ -103,7 +102,12 @@
         </v-dialog>
       </v-row>
       <v-row>
-        <v-simple-table fixed-header class="mt-2" height="400">
+        <v-simple-table
+          fixed-header
+          class="mt-5"
+          max-height="400"
+          style="width:100%;"
+        >
           <template v-slot:default>
             <thead>
               <tr class="py-5">
@@ -122,28 +126,39 @@
                 <th></th>
               </tr>
             </thead>
-            <tbody v-for="(exp, index) in experiences" :key="index">
+            <tbody v-if="expDataLoad">
+              <tr>
+                <td colspan="4" class="text-center">
+                  <v-progress-circular
+                    class="my-10"
+                    :size="30"
+                    color="primary"
+                    indeterminate
+                  ></v-progress-circular>
+                </td>
+              </tr>
+            </tbody>
+            <tbody v-else v-for="(exp, index) in experiences" :key="index">
               <ExpData @expCardtoExp="readExpData" :exp="exp" />
             </tbody>
           </template>
         </v-simple-table>
       </v-row>
     </v-container>
-  </v-main>
+  </v-container>
 </template>
 
 <script>
 import FDK from "@/config/firebase.js";
-import Navbar from "@/components/Navbar.vue";
 import ExpData from "@/components/ExpData";
 
 export default {
-  components: { Navbar, ExpData },
+  components: { ExpData },
   data: () => {
     return {
       addExpDialog: false,
       experiences: null,
-      loading: false,
+      expDataLoad: true,
       newExp: {
         brief: null,
         companyLogoURL: null,
@@ -173,7 +188,7 @@ export default {
       this.readExpData();
     },
     readExpData: function() {
-      this.loading = true;
+      this.expDataLoad = true;
       this.experiences = [];
       FDK.firestore()
         .collection("experiences")
@@ -184,11 +199,11 @@ export default {
           });
         })
         .then(() => {
-          this.loading = false;
+          this.expDataLoad = false;
         });
     },
   },
-  mounted: function() {
+  created: function() {
     this.readExpData();
   },
 };

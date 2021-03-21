@@ -1,6 +1,5 @@
 <template>
-  <v-main>
-    <Navbar />
+  <v-container class="pt-15 px-xs-5 px-sm-5" fluid>
     <v-container>
       <v-row align="center">
         <span class="text-h5 grey--text text--darken-1 font-weight-medium"
@@ -30,14 +29,14 @@
                   <v-col cols="12">
                     <v-text-field
                       clearable
-                      label="Skill"
+                      label="Skill*"
                       v-model="newSkill.skill"
                     ></v-text-field>
                   </v-col>
                   <v-col cols="12">
                     <v-text-field
                       clearable
-                      label="Image URL"
+                      label="Image URL*"
                       type="url"
                       v-model="newSkill.skillLogoURL"
                     ></v-text-field>
@@ -84,13 +83,12 @@
         </v-col>
       </v-row>
     </v-container>
-  </v-main>
+  </v-container>
 </template>
 
 <script>
 import FDK from "@/config/firebase.js";
 import skillCard from "@/components/skillCard.vue";
-import Navbar from "@/components/Navbar.vue";
 
 export default {
   data: () => {
@@ -104,17 +102,21 @@ export default {
       },
     };
   },
-  components: { skillCard, Navbar },
+  components: { skillCard },
   methods: {
     setNewSkillData: function() {
       this.newSkill.skill = null;
       this.newSkill.skillLogoURL = null;
     },
     addNewSkill: async function() {
-      await FDK.firestore()
-        .collection("skills")
-        .add(this.newSkill);
-      this.readSkillsData();
+      if (this.newSkill.skillLogoURL != null && this.newSkill.skill != null) {
+        await FDK.firestore()
+          .collection("skills")
+          .add(this.newSkill);
+        this.readSkillsData();
+      } else {
+        alert("Please check the inputs!");
+      }
     },
     readSkillsData: function() {
       this.loading = true;
@@ -128,7 +130,7 @@ export default {
         .then(() => (this.loading = false));
     },
   },
-  mounted: function() {
+  created: function() {
     this.readSkillsData();
   },
 };
