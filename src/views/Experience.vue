@@ -29,35 +29,35 @@
                   <v-col cols="6">
                     <v-text-field
                       clearable
-                      label="Designation"
+                      label="Designation*"
                       v-model="newExp.designation"
                     ></v-text-field>
                   </v-col>
                   <v-col cols="6">
                     <v-text-field
                       clearable
-                      label="Company Name"
+                      label="Company Name*"
                       v-model="newExp.companyName"
                     ></v-text-field>
                   </v-col>
                   <v-col cols="6">
                     <v-text-field
                       clearable
-                      label="Start Month-Year"
+                      label="Start [Month-Year]*"
                       v-model="newExp.start"
                     ></v-text-field>
                   </v-col>
                   <v-col cols="6">
                     <v-text-field
                       clearable
-                      label="End Month-Year"
+                      label="End [Month-Year]*"
                       v-model="newExp.end"
                     ></v-text-field>
                   </v-col>
                   <v-col cols="6">
                     <v-text-field
                       clearable
-                      label="Company Website URL"
+                      label="Company Website URL*"
                       v-model="newExp.companyWebsiteURL"
                     ></v-text-field>
                   </v-col>
@@ -65,13 +65,13 @@
                   <v-col cols="6">
                     <v-text-field
                       clearable
-                      label="Company Logo URL"
+                      label="Company Logo URL*"
                       v-model="newExp.companyLogoURL"
                     ></v-text-field>
                   </v-col>
                   <v-col cols="12">
                     <v-textarea
-                      label="Work Description"
+                      label="Work Description*"
                       clearable
                       auto-grow
                       v-model="newExp.brief"
@@ -182,10 +182,27 @@ export default {
       this.newExp.start = null;
     },
     addExpData: async function() {
-      await FDK.firestore()
-        .collection("experiences")
-        .add(this.newExp);
-      this.readExpData();
+      if (
+        (this.newExp.brief != null &&
+          this.newExp.companyLogoURL != null &&
+          this.newExp.companyName != null &&
+          this.newExp.companyWebsiteURL != null &&
+          this.newExp.end != null &&
+          this.newExp.start != null &&
+          this.newExp.designation != null) ||
+        (this.newExp.brief.length != 0 &&
+          this.newExp.companyLogoURL.length != 0 &&
+          this.newExp.companyName.length != 0 &&
+          this.newExp.companyWebsiteURL.length != 0 &&
+          this.newExp.end.length != 0 &&
+          this.newExp.start.length != 0 &&
+          this.newExp.designation.length != 0)
+      ) {
+        await FDK.firestore()
+          .collection("experiences")
+          .add(this.newExp);
+        this.readExpData();
+      }
     },
     readExpData: function() {
       this.expDataLoad = true;

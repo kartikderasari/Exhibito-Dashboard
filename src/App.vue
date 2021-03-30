@@ -1,13 +1,11 @@
 <template>
   <v-app>
-    <Navbar />
+    <Navbar v-if="pathname != '/'" />
     <v-main>
       <router-view></router-view>
     </v-main>
-    <Footer />
-    <BottomNav
-      v-if="this.pathname != '/' && this.$vuetify.breakpoint.width < 800"
-    />
+    <Footer v-if="pathname != '/'" />
+    <BottomNav v-if="pathname != '/' && this.$vuetify.breakpoint.width < 800" />
   </v-app>
 </template>
 
@@ -23,7 +21,7 @@ export default {
     };
   },
   components: { Footer, BottomNav, Navbar },
-  mounted: function() {
+  created: function() {
     this.pathname = window.location.pathname;
   },
 };

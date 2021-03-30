@@ -29,14 +29,14 @@
                   <v-col cols="12">
                     <v-text-field
                       clearable
-                      label="Project Title"
+                      label="Project Title*"
                       v-model="newProject.title"
                     ></v-text-field>
                   </v-col>
                   <v-col cols="6">
                     <v-text-field
                       clearable
-                      label="Project Image URL"
+                      label="Project Image URL*"
                       v-model="newProject.projectImageURL"
                     ></v-text-field>
                   </v-col>
@@ -57,13 +57,13 @@
                   <v-col cols="6">
                     <v-text-field
                       clearable
-                      label="Tech Stack"
+                      label="Tech Stack*"
                       v-model="newProject.techStack"
                     ></v-text-field>
                   </v-col>
                   <v-col cols="12">
                     <v-textarea
-                      label="Project Description"
+                      label="Project Description*"
                       clearable
                       auto-grow
                       v-model="newProject.brief"
@@ -155,10 +155,23 @@ export default {
       this.newProject.title = null;
     },
     addProject: async function() {
-      await FDK.firestore()
-        .collection("projects")
-        .add(this.newProject);
-      this.readProjectData();
+      if (
+        (this.newProject.brief != null &&
+          this.newProject.projectImageURL != null &&
+          this.newProject.techStack != null &&
+          this.newProject.title != null) ||
+        (this.newProject.brief.length != 0 &&
+          this.newProject.projectImageURL.length != 0 &&
+          this.newProject.techStack.length != 0 &&
+          this.newProject.title.length != 0)
+      ) {
+        await FDK.firestore()
+          .collection("projects")
+          .add(this.newProject);
+        this.readProjectData();
+      } else {
+        alert("Please check the inputs!");
+      }
     },
     readProjectData: function() {
       this.loading = true;

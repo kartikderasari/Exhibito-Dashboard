@@ -195,12 +195,31 @@ export default {
       this.$emit("expCardtoExp");
     },
     updateExpData: function() {
-      FDK.firestore()
-        .collection("experiences")
-        .doc(this.exp.id)
-        .update(this.newExp)
-        .then(() => this.$emit("expCardtoExp"))
-        .catch((e) => console.log(e));
+      if (
+        (this.newExp.brief != null &&
+          this.newExp.companyLogoURL != null &&
+          this.newExp.companyName != null &&
+          this.newExp.companyWebsiteURL != null &&
+          this.newExp.end != null &&
+          this.newExp.start != null &&
+          this.newExp.designation != null) ||
+        (this.newExp.brief.length != 0 &&
+          this.newExp.companyLogoURL.length != 0 &&
+          this.newExp.companyName.length != 0 &&
+          this.newExp.companyWebsiteURL.length != 0 &&
+          this.newExp.end.length != 0 &&
+          this.newExp.start.length != 0 &&
+          this.newExp.designation.length != 0)
+      ) {
+        FDK.firestore()
+          .collection("experiences")
+          .doc(this.exp.id)
+          .update(this.newExp)
+          .then(() => this.$emit("expCardtoExp"))
+          .catch((e) => console.log(e));
+      } else {
+        alert("Please check the inputs!");
+      }
     },
   },
 };

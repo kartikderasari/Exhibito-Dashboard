@@ -18,7 +18,7 @@
       <v-tab to="experience">Experience</v-tab>
       <v-tab to="projects">Projects</v-tab>
     </v-tabs>
-    <v-btn color="primary" outlined small @click="logoutUser()">Logout</v-btn>
+    <v-btn color="red" outlined small @click="logoutUser()">Logout</v-btn>
   </v-app-bar>
 </template>
 
@@ -47,7 +47,7 @@ export default {
       });
     },
   },
-  created: function() {
+  mounted: function() {
     this.checkState();
   },
 };

@@ -78,7 +78,14 @@
         ></v-progress-circular>
       </v-row>
       <v-row v-if="!loading">
-        <v-col cols="4" v-for="(skill, index) in skills" :key="index">
+        <v-col
+          cols="6"
+          sm="4"
+          md="3"
+          lg="2"
+          v-for="(skill, index) in skills"
+          :key="index"
+        >
           <skillCard :skill="skill" v-on:skillCardtoSkill="readSkillsData" />
         </v-col>
       </v-row>

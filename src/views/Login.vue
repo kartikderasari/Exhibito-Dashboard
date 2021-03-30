@@ -7,7 +7,7 @@
             <v-img
               class="rounded-lg"
               lazy
-              src="https://raw.githubusercontent.com/kartikderasari/Portfolio-Assets/main/Projects/News-Flash.svg?token=AJSPHOMJMQ5X73DFCSNWFVLAK6VMK"
+              src="https://raw.githubusercontent.com/kartikderasari/Portfolio-Assets/main/Projects/Portfolio-Dashboard.svg"
               max-width="50vh"
             ></v-img>
           </v-col>
@@ -56,12 +56,16 @@ export default {
           window.location.href = "./about";
         } else {
           //Do nothing
+          setTimeout(() => {
+            console.log("Nothing happens");
+          }, 5000);
+          return;
         }
       });
     },
   },
-  mounted: function() {
-    this.checkState();
+  created: function() {
+    //this.checkState();
   },
 };
 </script>

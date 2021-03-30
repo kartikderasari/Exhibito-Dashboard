@@ -24,14 +24,14 @@
                 <v-col cols="12">
                   <v-text-field
                     clearable
-                    label="Project Title"
+                    label="Project Title*"
                     v-model="newProject.title"
                   ></v-text-field>
                 </v-col>
                 <v-col cols="6">
                   <v-text-field
                     clearable
-                    label="Project Image URL"
+                    label="Project Image URL*"
                     v-model="newProject.projectImageURL"
                   ></v-text-field>
                 </v-col>
@@ -52,13 +52,13 @@
                 <v-col cols="6">
                   <v-text-field
                     clearable
-                    label="Tech Stack"
+                    label="Tech Stack*"
                     v-model="newProject.techStack"
                   ></v-text-field>
                 </v-col>
                 <v-col cols="12">
                   <v-textarea
-                    label="Project Description"
+                    label="Project Description*"
                     clearable
                     auto-grow
                     v-model="newProject.brief"
@@ -171,12 +171,25 @@ export default {
       this.$emit("projectCardtoProject");
     },
     updateExpData: function() {
-      FDK.firestore()
-        .collection("projects")
-        .doc(this.project.id)
-        .update(this.newProject)
-        .then(() => this.$emit("projectCardtoProject"))
-        .catch((e) => console.log(e));
+      if (
+        (this.newProject.brief != null &&
+          this.newProject.projectImageURL != null &&
+          this.newProject.techStack != null &&
+          this.newProject.title != null) ||
+        (this.newProject.brief.length != 0 &&
+          this.newProject.projectImageURL.length != 0 &&
+          this.newProject.techStack.length != 0 &&
+          this.newProject.title.length != 0)
+      ) {
+        FDK.firestore()
+          .collection("projects")
+          .doc(this.project.id)
+          .update(this.newProject)
+          .then(() => this.$emit("projectCardtoProject"))
+          .catch((e) => console.log(e));
+      } else {
+        alert("Please check the inputs!");
+      }
     },
   },
 };
