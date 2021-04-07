@@ -6,7 +6,7 @@
         to="/about"
         style="width: 250px;"
       >
-        Portfolio Dashboard
+        Exhibito Dashboard
       </router-link>
     </div>
 

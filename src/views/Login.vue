@@ -20,12 +20,12 @@
           >
             <v-card-title
               class="headline font-weight-medium teal--text text--darken-2 pb-0"
-              >Portfolio Dashboard</v-card-title
+              >Exhibito Dashboard</v-card-title
             >
             <v-card-text
               class="body-1 text-center text-sm-center text-md-start text-lg-start"
             >
-              Login to your account to manage your dashboard!
+              Login to your account to access your dashboard!
             </v-card-text>
             <v-card-actions>
               <v-btn class="ml-2 px-5" color="primary" @click="googleLogin()"
@@ -43,15 +43,15 @@
 import FDK from "@/config/firebase.js";
 export default {
   methods: {
-    googleLogin: function() {
+    googleLogin: function () {
       var provider = new FDK.auth.GoogleAuthProvider();
       provider.addScope("https://www.googleapis.com/auth/plus.login");
       FDK.auth()
         .signInWithPopup(provider)
         .then(() => (window.location.href = "./about"));
     },
-    checkState: function() {
-      FDK.auth().onAuthStateChanged(function(user) {
+    checkState: function () {
+      FDK.auth().onAuthStateChanged(function (user) {
         if (user) {
           window.location.href = "./about";
         } else {
@@ -64,7 +64,7 @@ export default {
       });
     },
   },
-  created: function() {
+  created: function () {
     //this.checkState();
   },
 };
